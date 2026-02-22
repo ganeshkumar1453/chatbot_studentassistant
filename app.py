@@ -42,7 +42,7 @@ prompt = ChatPromptTemplate.from_messages(
             "Use prior conversation context when relevant. "
             "Answer study-related questions clearly and concisely. "
             "If unsure, say you don't know.",
-        ),
+        ),  
         ("placeholder", "{history}"),
         ("user", "{question}"),
     ]
