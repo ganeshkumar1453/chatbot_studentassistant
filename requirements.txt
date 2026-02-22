@@ -1,0 +1,15 @@
+# Core numerical library  - vector / matrix
+numpy
+#  - opensource llm related app [LangChain ecosystem]
+langchain
+# - to access groq 
+langchain_groq
+langchain_core
+langchain_community
+pymongo
+# api libs
+fastapi
+uvicorn
+python-multipart
+
+
