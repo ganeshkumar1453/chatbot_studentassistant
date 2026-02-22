@@ -6,7 +6,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
-from langchain_core.prompts import ChatPromptTemplate
+from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 
 from langchain_groq import ChatGroq
 
@@ -38,7 +38,10 @@ prompt = ChatPromptTemplate.from_messages(
     [
         (
             "system",
-            "You are a Student assistant, answer study-related questions conscisely",
+            "You are a helpful academic study assistant. "
+            "Use prior conversation context when relevant. "
+            "Answer study-related questions clearly and concisely. "
+            "If unsure, say you don't know.",
         ),
         ("placeholder", "{history}"),
         ("user", "{question}"),
@@ -65,8 +68,6 @@ def home():
 
 @app.post("/chat")
 def chat(request: ChatRequest):
-    print(f"request.user_id {request.user_id}")
-    print(f"response.content {request.question}")
 
     history = get_history(user_id=request.user_id)
 
@@ -75,7 +76,7 @@ def chat(request: ChatRequest):
     collection.insert_one(
         {
             "user_id": request.user_id,
-            "role": "User",
+            "role": "user",
             "message": request.question,
             "timestamp": datetime.now(UTC),
         }
@@ -84,7 +85,7 @@ def chat(request: ChatRequest):
     collection.insert_one(
         {
             "user_id": request.user_id,
-            "role": "Assistant",
+            "role": "assistant",
             "message": response.content,
             "timestamp": datetime.now(UTC),
         }
